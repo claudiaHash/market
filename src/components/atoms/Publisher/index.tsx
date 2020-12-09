@@ -9,6 +9,7 @@ import EtherscanLink from '../EtherscanLink'
 import { accountTruncate } from '../../../utils/wallet'
 import axios from 'axios'
 import { useOcean } from '@oceanprotocol/react'
+import { useProfile } from '../../../providers/Profile'
 import { ReactComponent as Info } from '../../../images/info.svg'
 import ProfileDetails from './ProfileDetails'
 import Add from './Add'
@@ -18,31 +19,33 @@ const cx = classNames.bind(styles)
 export default function Publisher({
   account,
   minimal,
-  className
+  className,
 }: {
   account: string
   minimal?: boolean
   className?: string
 }): ReactElement {
   const { networkId, accountId } = useOcean()
-  const [profile, setProfile] = useState<Profile>()
+  const { profile, setProfile } = useProfile()
   const [name, setName] = useState<string>()
 
   const showAdd = account === accountId && !profile
 
   useEffect(() => {
+   
     if (!account) return
 
     setName(accountTruncate(account))
     const source = axios.CancelToken.source()
 
     async function get3Box() {
-      const profile = await get3BoxProfile(account, source.token)
-      if (!profile) return
+      const profileData = await get3BoxProfile(account, source.token)
+      if (!profileData) return
 
-      setProfile(profile)
-      const { name, emoji } = profile
+      setProfile(profileData)
+      const { name, emoji } = profileData
       name && setName(`${emoji || ''} ${name}`)
+      
     }
     get3Box()
 

@@ -5,12 +5,17 @@ import { useOcean } from '@oceanprotocol/react'
 import Web3Feedback from './Feedback'
 import { getInjectedProviderName } from 'web3modal'
 import Conversion from '../../atoms/Price/Conversion'
+import { Profile } from '../../../models/Profile'
 import { formatCurrency } from '@coingecko/cryptoformat'
 import { useUserPreferences } from '../../../providers/UserPreferences'
+import ProfileDetails  from '../../atoms/Publisher/ProfileDetails'
+import { useProfile } from '../../../providers/Profile'
 
-export default function Details(): ReactElement {
-  const { balance, connect, logout } = useOcean()
+
+export default function Details (): ReactElement {
+  const { balance, connect, logout, account, networkId } = useOcean()
   const { locale } = useUserPreferences()
+  const { profile } = useProfile()
 
   return (
     <div className={styles.details}>
@@ -24,7 +29,7 @@ export default function Details(): ReactElement {
             {key === 'ocean' && <Conversion price={value} />}
           </li>
         ))}
-
+        <ProfileDetails profile={profile} networkId={networkId} account={account.getId()} />
         <li className={styles.actions}>
           <span title="Connected provider">{getInjectedProviderName()}</span>
           <Button

@@ -7,6 +7,7 @@ import { useSiteMetadata } from '../hooks/useSiteMetadata'
 import { useOcean } from '@oceanprotocol/react'
 import Alert from './atoms/Alert'
 import { graphql, PageProps, useStaticQuery } from 'gatsby'
+import { ProfileProvider } from '../providers/Profile'
 
 const contentQuery = graphql`
   query AppQuery {
@@ -41,6 +42,7 @@ export default function App({
   } = useOcean()
 
   return (
+    <ProfileProvider>
     <Styles>
       <div className={styles.app}>
         <Header />
@@ -62,5 +64,6 @@ export default function App({
         <Footer />
       </div>
     </Styles>
+    </ProfileProvider>
   )
 }
